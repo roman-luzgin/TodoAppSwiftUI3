@@ -17,6 +17,10 @@
 		C58CD79626813EB6002C21C6 /* Categories.swift in Sources */ = {isa = PBXBuildFile; fileRef = C58CD79526813EB6002C21C6 /* Categories.swift */; };
 		C5B7DEB326827D7500F3903A /* MainScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B7DEB226827D7500F3903A /* MainScreen.swift */; };
 		C5B7DEB52682826800F3903A /* ViewContextMethods.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B7DEB42682826800F3903A /* ViewContextMethods.swift */; };
+		C5B7DEB8268911BD00F3903A /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B7DEB7268911BD00F3903A /* Haptics.swift */; };
+		C5B7DEBB2689156800F3903A /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B7DEBA2689156800F3903A /* Menu.swift */; };
+		C5B7DEBD2689158500F3903A /* SearchSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B7DEBC2689158500F3903A /* SearchSheet.swift */; };
+		C5B7DEBF2689159300F3903A /* NotificationsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B7DEBE2689159300F3903A /* NotificationsSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +35,11 @@
 		C58CD79526813EB6002C21C6 /* Categories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Categories.swift; sourceTree = "<group>"; };
 		C5B7DEB226827D7500F3903A /* MainScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreen.swift; sourceTree = "<group>"; };
 		C5B7DEB42682826800F3903A /* ViewContextMethods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewContextMethods.swift; sourceTree = "<group>"; };
+		C5B7DEB6268297C100F3903A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		C5B7DEB7268911BD00F3903A /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
+		C5B7DEBA2689156800F3903A /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
+		C5B7DEBC2689158500F3903A /* SearchSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSheet.swift; sourceTree = "<group>"; };
+		C5B7DEBE2689159300F3903A /* NotificationsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +72,8 @@
 		C58CD77C26813072002C21C6 /* TodoAppSwiftUI3 */ = {
 			isa = PBXGroup;
 			children = (
+				C5B7DEB92689155600F3903A /* NavigationBarSheets */,
+				C5B7DEB6268297C100F3903A /* Info.plist */,
 				C58CD77D26813073002C21C6 /* TodoAppSwiftUI3App.swift */,
 				C58CD77F26813073002C21C6 /* ToDoList.swift */,
 				C5B7DEB226827D7500F3903A /* MainScreen.swift */,
@@ -89,6 +100,7 @@
 			children = (
 				C58CD79526813EB6002C21C6 /* Categories.swift */,
 				C5B7DEB42682826800F3903A /* ViewContextMethods.swift */,
+				C5B7DEB7268911BD00F3903A /* Haptics.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -99,6 +111,16 @@
 				C58CD793268137DD002C21C6 /* CategoryCards.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		C5B7DEB92689155600F3903A /* NavigationBarSheets */ = {
+			isa = PBXGroup;
+			children = (
+				C5B7DEBA2689156800F3903A /* Menu.swift */,
+				C5B7DEBC2689158500F3903A /* SearchSheet.swift */,
+				C5B7DEBE2689159300F3903A /* NotificationsSheet.swift */,
+			);
+			path = NavigationBarSheets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -171,9 +193,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5B7DEB8268911BD00F3903A /* Haptics.swift in Sources */,
 				C58CD78726813076002C21C6 /* Persistence.swift in Sources */,
 				C5B7DEB326827D7500F3903A /* MainScreen.swift in Sources */,
 				C58CD78A26813076002C21C6 /* TodoAppSwiftUI3.xcdatamodeld in Sources */,
+				C5B7DEBD2689158500F3903A /* SearchSheet.swift in Sources */,
+				C5B7DEBB2689156800F3903A /* Menu.swift in Sources */,
+				C5B7DEBF2689159300F3903A /* NotificationsSheet.swift in Sources */,
 				C58CD78026813073002C21C6 /* ToDoList.swift in Sources */,
 				C58CD77E26813073002C21C6 /* TodoAppSwiftUI3App.swift in Sources */,
 				C58CD794268137DD002C21C6 /* CategoryCards.swift in Sources */,
@@ -312,9 +338,14 @@
 				DEVELOPMENT_TEAM = 4T7X5D3BA4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TodoAppSwiftUI3/Info.plist;
+				INFOPLIST_KEY_CFBundleExecutable = TodoAppSwiftUI3;
+				INFOPLIST_KEY_CFBundleName = TodoAppSwiftUI3;
+				INFOPLIST_KEY_CFBundleVersion = 1;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -342,9 +373,14 @@
 				DEVELOPMENT_TEAM = 4T7X5D3BA4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TodoAppSwiftUI3/Info.plist;
+				INFOPLIST_KEY_CFBundleExecutable = TodoAppSwiftUI3;
+				INFOPLIST_KEY_CFBundleName = TodoAppSwiftUI3;
+				INFOPLIST_KEY_CFBundleVersion = 1;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;

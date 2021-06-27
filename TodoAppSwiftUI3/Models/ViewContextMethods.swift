@@ -9,12 +9,21 @@ import Foundation
 import CoreData
 import SwiftUI
 
-struct contextMethods {
+struct ViewContextMethods {
 
-    static func addItem(context: NSManagedObjectContext) {
+    static func addItem(
+        context: NSManagedObjectContext,
+        dueDate: Date,
+        toDoText: String,
+        category: String
+    ) {
         withAnimation {
             let newItem = Item(context: context)
             newItem.timestamp = Date()
+            newItem.dueDate = dueDate
+            newItem.toDoText = toDoText
+            newItem.isDone = false
+            newItem.category = category
             
             do {
                 try context.save()
