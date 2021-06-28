@@ -12,7 +12,7 @@ struct MainScreen: View {
     @Environment(\.managedObjectContext) private var viewContext
     
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: false)],
         animation: .default)
     private var items: FetchedResults<Item>
     
@@ -22,9 +22,12 @@ struct MainScreen: View {
         }
     }
     
+    @State var newItemOpen = false
+    
     @State var searchOpen = false
     @State var notificationsOpen = false
-    @State var menuOpen = false
+    @Binding var menuOpen: Bool
+    
     
     @AppStorage("userName") var userName = "username"
     
@@ -80,6 +83,8 @@ struct MainScreen: View {
                             }
                             .frame(height: 200)
                         }
+                        
+                        
                     }
                 }
                 
@@ -91,12 +96,7 @@ struct MainScreen: View {
                         
                         Button(action: {
                             
-                            ViewContextMethods.addItem(
-                                context: viewContext,
-                                dueDate: Date(),
-                                toDoText: "Do this",
-                                category: "Business"
-                            )
+                            newItemOpen.toggle()
                             
                         }) {
                             Image(systemName: "plus.circle.fill")
@@ -105,6 +105,9 @@ struct MainScreen: View {
                                 .foregroundColor(.indigo)
                                 .shadow(color: .indigo.opacity(0.3), radius: 10, x: 0, y: 10)
                                 .padding()
+                        }
+                        .fullScreenCover(isPresented: $newItemOpen, onDismiss: {}) {
+                            NewItem(newItemOpen: $newItemOpen)
                         }
                         
                     }
@@ -117,7 +120,9 @@ struct MainScreen: View {
             // Navigation bar buttons to open different menus
             .navigationBarItems(leading:
                                     Button(action: {
-                                        menuOpen.toggle()
+                                        withAnimation {
+                                            menuOpen.toggle()
+                                        }
                                         Haptics.giveSmallHaptic()
                                     }) {
                                         Image(systemName: "rectangle.portrait.leftthird.inset.filled")
@@ -149,7 +154,7 @@ struct MainScreen: View {
 
 struct MainScreen_Previews: PreviewProvider {
     static var previews: some View {
-        MainScreen()
+        MainScreen(menuOpen: .constant(false))
     }
 }
 

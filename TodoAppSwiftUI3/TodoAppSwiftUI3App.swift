@@ -13,7 +13,7 @@ struct TodoAppSwiftUI3App: App {
 
     var body: some Scene {
         WindowGroup {
-            MainScreen()
+            ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

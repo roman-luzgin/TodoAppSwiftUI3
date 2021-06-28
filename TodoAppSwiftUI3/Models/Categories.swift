@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct ItemCategory: Identifiable {
+struct ItemCategory: Identifiable, Hashable {
     let id = UUID()
     
     var category: String

@@ -12,16 +12,25 @@ struct ToDoList: View {
     @Environment(\.managedObjectContext) private var viewContext
     
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \Item.dueDate, ascending: false)],
         animation: .default)
-    
     private var items: FetchedResults<Item>
     
     @State private var searchQuery: String = ""
+    @State private var notDoneOnly = false
     
     var body: some View {
         NavigationView {
             List {
+                Section {
+                    Toggle(isOn: $notDoneOnly) {
+                        Text("Show not done only")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .toggleStyle(.button)
+                    .tint(.indigo)
+                        
+                }
                 Section {
                     ForEach(searchResults, id: \.self) { item in
                         HStack {
@@ -64,9 +73,10 @@ struct ToDoList: View {
                                         .foregroundColor(.secondary)
                                 }
                             }
+                            .padding(.leading, 5)
                         
                         }
-                        .frame(height: 80)
+                        .frame(maxHeight: 130)
                         .listRowSeparator(.hidden)
                     }
                     .onDelete(perform: deleteItems)
@@ -86,14 +96,32 @@ struct ToDoList: View {
     var searchResults: [Item] {
         if searchQuery.isEmpty{
             // getting all items
-            return items.filter {
-                !$0.toDoText!.isEmpty
+            switch notDoneOnly {
+            case true:
+                return items.filter {
+                    !$0.toDoText!.isEmpty && $0.isDone == false
+                }
+            default:
+                return items.filter {
+                    !$0.toDoText!.isEmpty
+                }
             }
+        
+            
+            
         } else {
             // getting only searched items
-            return items.filter {
-                $0.toDoText!.lowercased().contains(searchQuery.lowercased())
+            switch notDoneOnly {
+            case true:
+                return items.filter {
+                    $0.toDoText!.lowercased().contains(searchQuery.lowercased()) && $0.isDone == false
+                }
+            default:
+                return items.filter {
+                    $0.toDoText!.lowercased().contains(searchQuery.lowercased())
+                }
             }
+            
         }
     }
     
@@ -136,7 +164,7 @@ private let itemFormatter: DateFormatter = {
     return formatter
 }()
 
-struct ContentView_Previews: PreviewProvider {
+struct ToDoList_Previews: PreviewProvider {
     static var previews: some View {
         ToDoList().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
