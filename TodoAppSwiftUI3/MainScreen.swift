@@ -9,7 +9,9 @@ import SwiftUI
 import CoreData
 
 struct MainScreen: View {
-    @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.managedObjectContext) var viewContext
+    
+    @Namespace private var namespace
     
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: false)],
@@ -32,124 +34,199 @@ struct MainScreen: View {
     @AppStorage("userName") var userName = "username"
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                ScrollView {
-                    VStack {
-                        HStack {
-                            Text("Categories")
-                                .font(.body.smallCaps())
-                                .foregroundColor(.secondary)
-                            Spacer()
-                        }
-                        .padding(.horizontal)
-                        
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            LazyHStack(spacing: 20) {
-                                ForEach(categories) {category in
-                                    CategoryCards(category: category.category,
-                                                  color: category.color,
-                                                  numberOfTasks: 40,
-                                                  tasksDone: 20)
+        ZStack {
+            if !newItemOpen {
+                NavigationView {
+                    ZStack {
+                        ScrollView {
+                            VStack {
+                                HStack {
+                                    Text("Categories")
+                                        .font(.body.smallCaps())
+                                        .foregroundColor(.secondary)
+                                    Spacer()
                                 }
-                                .padding(.bottom, 30)
+                                .padding(.horizontal)
+                                
+                                
+                                ScrollView(.horizontal, showsIndicators: false) {
+                                    LazyHStack(spacing: 20) {
+                                        ForEach(categories) {category in
+                                            CategoryCards(category: category.category,
+                                                          color: category.color,
+                                                          numberOfTasks: getTotalTasksNumber(category: category),
+                                                          tasksDone: getDoneTasksNumber(category: category))
+                                        }
+                                        .padding(.bottom, 30)
+                                        
+                                    }
+                                    .padding(.leading, 20)
+                                }
+                                .frame(height: 190)
                                 
                             }
-                            .padding(.leading, 20)
+                            .padding(.top, 30)
+                            
+                            // MARK: Actual list of todo items
+                            VStack {
+                                HStack {
+                                    Text("Today's tasks")
+                                        .font(.body.smallCaps())
+                                        .foregroundColor(.secondary)
+                                    Spacer()
+                                }
+                                .padding(.horizontal)
+                                
+                                if todaysItems.count > 0 {
+                                    LazyVStack(spacing: 10) {
+                                        ForEach(todaysItems) { toDoItem in
+                                            
+                                            // MARK: Today's tasks list view
+                                            VStack {
+                                                HStack {
+                                                    Image(systemName: toDoItem.isDone ? "circle.fill" : "circle")
+                                                        .resizable()
+                                                        .foregroundColor(getCategoryColor(toDoItem: toDoItem))
+                                                        .frame(width: 30, height: 30)
+                                                        .onTapGesture {
+                                                            withAnimation {
+                                                                ViewContextMethods.isDone(item: toDoItem, context: viewContext)
+                                                            }
+                                                        }
+                                                        .padding(.leading, 20)
+                                                        .padding(.trailing, 10)
+            
+                                                    Text("\(toDoItem.toDoText ?? "")")
+                                                    Spacer()
+                                                }
+                                            }
+                                            .frame(maxWidth: .infinity)
+                                            .frame(height: 100)
+                                            .background(
+                                                ZStack {
+                                                getCategoryColor(toDoItem: toDoItem).opacity(0.7)
+                                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                                    .padding(.horizontal, 26)
+                                                    .padding(.vertical, 15)
+                                                VStack {
+                                                    // empty VStack for the blur
+                                                }
+                                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                                .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 20))
+                                            },
+                                                alignment: .leading
+                                            )
+                                            .padding(.horizontal)
+                                            
+                                        }
+                                    }
+                                    .padding(.bottom, 60)
+                                } else {
+                                    VStack{
+                                        Text("No tasks for today")
+                                            .foregroundColor(.secondary)
+                                    }
+                                    .frame(height: 200)
+                                }
+                                
+                            }
                         }
-                        .frame(height: 190)
-                    }
-                    .padding(.top, 30)
-                    
-                    VStack {
-                        HStack {
-                            Text("Today's tasks")
-                                .font(.body.smallCaps())
-                                .foregroundColor(.secondary)
-                            Spacer()
-                        }
-                        .padding(.horizontal)
                         
-                        if todaysItems.count > 0 {
-                            LazyVStack {
-                                ForEach(todaysItems) {
-                                    ToDoCard(toDoItem: $0)
+                        // MARK: Bottom button to add new item
+                        VStack{
+                            Spacer()
+                            HStack{
+                                Spacer()
+                                Button(action: {
+                                    withAnimation {
+                                        newItemOpen.toggle()
+                                    }
+                                }) {
+                                    Image(systemName: "plus.circle.fill")
+                                        .resizable()
+                                        .frame(width: 70, height: 70)
+                                        .foregroundColor(.indigo)
+                                        .shadow(color: .indigo.opacity(0.3), radius: 10, x: 0, y: 10)
+                                        .padding()
                                 }
                             }
-                        } else {
-                            VStack{
-                                Text("No tasks for today")
-                                    .foregroundColor(.secondary)
-                            }
-                            .frame(height: 200)
+                            .matchedGeometryEffect(id: "button", in: namespace)
                         }
                         
                         
                     }
-                }
-                
-                VStack{
-                    Spacer()
+                    .navigationTitle("What's up, \(userName)!")
                     
-                    HStack{
-                        Spacer()
+                    // Navigation bar buttons to open different menus
+                    .navigationBarItems(leading:
+                                            Button(action: {
+                        withAnimation {
+                            menuOpen.toggle()
+                        }
+                        Haptics.giveSmallHaptic()
+                    }) {
+                        Image(systemName: "rectangle.portrait.leftthird.inset.filled")
+                    }
+                                            .buttonStyle(PlainButtonStyle())
+                                        ,
+                                        trailing: HStack {
+                        Button(action: {
+                            searchOpen.toggle()
+                            Haptics.giveSmallHaptic()
+                        }) {
+                            Image(systemName: "magnifyingglass")
+                        }
+                        .padding(.horizontal)
+                        .buttonStyle(PlainButtonStyle())
                         
                         Button(action: {
-                            
-                            newItemOpen.toggle()
-                            
+                            notificationsOpen.toggle()
+                            Haptics.giveSmallHaptic()
                         }) {
-                            Image(systemName: "plus.circle.fill")
-                                .resizable()
-                                .frame(width: 70, height: 70)
-                                .foregroundColor(.indigo)
-                                .shadow(color: .indigo.opacity(0.3), radius: 10, x: 0, y: 10)
-                                .padding()
+                            Image(systemName: "bell")
                         }
-                        .fullScreenCover(isPresented: $newItemOpen, onDismiss: {}) {
-                            NewItem(newItemOpen: $newItemOpen)
-                        }
+                        .buttonStyle(PlainButtonStyle())
                         
-                    }
+                    })
                 }
                 
-                
+                // MARK: New item view
+            } else {
+                NewItem(namespace: namespace, newItemOpen: $newItemOpen)
             }
-            .navigationTitle("What's up, \(userName)!")
             
-            // Navigation bar buttons to open different menus
-            .navigationBarItems(leading:
-                                    Button(action: {
-                                        withAnimation {
-                                            menuOpen.toggle()
-                                        }
-                                        Haptics.giveSmallHaptic()
-                                    }) {
-                                        Image(systemName: "rectangle.portrait.leftthird.inset.filled")
-                                    }
-                                    .buttonStyle(PlainButtonStyle())
-                                    ,
-                                trailing: HStack {
-                                    Button(action: {
-                                        searchOpen.toggle()
-                                        Haptics.giveSmallHaptic()
-                                    }) {
-                                        Image(systemName: "magnifyingglass")
-                                    }
-                                    .padding(.horizontal)
-                                    .buttonStyle(PlainButtonStyle())
-                                           
-                                    Button(action: {
-                                        notificationsOpen.toggle()
-                                        Haptics.giveSmallHaptic()
-                                    }) {
-                                        Image(systemName: "bell")
-                                    }
-                                    .buttonStyle(PlainButtonStyle())
-                                               
-            })
         }
     }
+    
+    func getCategoryColor(toDoItem: Item) -> Color {
+        var category: [ItemCategory] {
+            categories.filter {
+                $0.category == toDoItem.category
+            }
+        }
+        return category[0].color
+    }
+    
+    func getTotalTasksNumber(category: ItemCategory) -> Int {
+        var categoryTasks: [Item] {
+            items.filter {
+                $0.category == category.category
+            }
+        }
+        
+        return categoryTasks.count
+    }
+    
+    func getDoneTasksNumber(category: ItemCategory) -> Int {
+        var categoryTasksDone: [Item] {
+            items.filter {
+                $0.category == category.category && $0.isDone == true
+            }
+        }
+        
+        return categoryTasksDone.count
+    }
+    
 }
 
 struct MainScreen_Previews: PreviewProvider {
@@ -158,11 +235,3 @@ struct MainScreen_Previews: PreviewProvider {
     }
 }
 
-struct ToDoCard: View {
-    
-    var toDoItem: Item
-    
-    var body: some View {
-        Text("\(toDoItem.toDoText ?? "")")
-    }
-}

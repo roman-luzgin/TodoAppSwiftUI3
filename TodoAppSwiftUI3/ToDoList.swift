@@ -17,18 +17,25 @@ struct ToDoList: View {
     private var items: FetchedResults<Item>
     
     @State private var searchQuery: String = ""
+    //@State private var showAllItems = true
     @State private var notDoneOnly = false
     
     var body: some View {
         NavigationView {
             List {
                 Section {
-                    Toggle(isOn: $notDoneOnly) {
-                        Text("Show not done only")
-                            .frame(maxWidth: .infinity)
+                    HStack {
+                        
+                        Toggle(isOn: $notDoneOnly) {
+                            Text(notDoneOnly ? "Show all items" : "Show not done only")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .toggleStyle(.button)
+                        .tint(.indigo)
+                        .clipShape(Capsule())
+                        .animation(.easeInOut, value: notDoneOnly)
+                    
                     }
-                    .toggleStyle(.button)
-                    .tint(.indigo)
                         
                 }
                 Section {
@@ -42,7 +49,7 @@ struct ToDoList: View {
                                     .foregroundColor(.green)
                                     .frame(width: 30, height: 30)
                                     .onTapGesture {
-                                        isDone(item: item)
+                                        ViewContextMethods.isDone(item: item, context: viewContext)
                                     }
                                 
                             } else {
@@ -51,7 +58,7 @@ struct ToDoList: View {
                                     .foregroundColor(.red)
                                     .frame(width: 30, height: 30)
                                     .onTapGesture {
-                                        isDone(item: item)
+                                        ViewContextMethods.isDone(item: item, context: viewContext)
                                     }
                             }
                             
@@ -127,19 +134,7 @@ struct ToDoList: View {
     
     
     
-    private func isDone(item: Item) {
-        withAnimation{
-            item.isDone.toggle()
-        }
-        do {
-            try viewContext.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-        }
-    }
+    
     
     private func deleteItems(offsets: IndexSet) {
         withAnimation {

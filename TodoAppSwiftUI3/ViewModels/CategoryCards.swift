@@ -44,7 +44,19 @@ struct CategoryCards: View {
         }
         .padding(10)
         .frame(width: 200, height: 120, alignment: .leading)
-        .background(Color.white, alignment: .leading)
+        .background(
+            ZStack {
+            color.opacity(0.9)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .padding(20)
+            VStack {
+                // empty VStack for the blur
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(.thinMaterial)
+        },
+            alignment: .leading
+        )
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         .shadow(color: .black.opacity(0.1), radius: 20, x: 5, y: 10)
     }

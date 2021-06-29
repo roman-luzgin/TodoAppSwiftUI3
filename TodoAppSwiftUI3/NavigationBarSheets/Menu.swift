@@ -47,7 +47,6 @@ struct Menu: View {
                 .scaleEffect(menuOpen ? 0.5 : 1)
                 .offset(x: menuOpen ? 160 : 0)
             
-            
         }
     }
 }
