@@ -27,80 +27,110 @@ struct NewItem: View {
             
             ScrollView {
                 VStack {
-                            Picker(selection: $category,
-                                   label:
-                                    Text("\(category)")
-                                    .foregroundColor(.black)
-                                    .animation(.none)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    //.frame(height: 50)
-                                    .background(Color.white)
-                            ) {
-                                ForEach(categories, id: \.self) {
-                                    Text($0.category)
-                                        .tag($0.category)
-                                    
-                                }
-                            }
-                            .pickerStyle(MenuPickerStyle())
+                    Picker(selection: $category,
+                           label:
+                            Text("\(category)")
+                            .font(.body.bold())
                             .padding()
+                            .foregroundColor(.black)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                           //.frame(height: 50)
+                            .background(
+                                ZStack {
+                        getCategoryColor(categoryChosen: category).opacity(0.7)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 2)
+                        VStack {
+                            // empty VStack for the blur
+                        }
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 5))
+                    },
+                                alignment: .leading
+                            )
+                            .shadow(color: .black.opacity(0.1), radius: 20, x: 5, y: 10)
+                            .shadow(color: .black.opacity(0.1), radius: 1, x: 1, y: 1)
+                            .shadow(color: .white.opacity(1), radius: 5, x: -1, y: -1)
+                    ) {
+                        ForEach(categories, id: \.self) {
+                            Text($0.category)
+                                .tag($0.category)
                             
+                        }
+                    }
+                    .pickerStyle(MenuPickerStyle())
+                    .padding()
+                    
+                    
+                    
+                    
+                    DatePicker(selection: $dueDate, displayedComponents: .date) {
+                        Text("Due date")
+                            
+                    }
+                    .padding(.horizontal)
+                    .padding(.vertical, 10)
+                    .accentColor(Color.indigo)
+                    
+                    .padding()
+                    
+                    
+                    
+                    
+                    ZStack(alignment: .leading) {
                         
                         
                         
-                        DatePicker("Due date", selection: $dueDate, displayedComponents: .date)
-                            .accentColor(Color.indigo)
-                            .padding()
                         
-                        
-                        
-                            ZStack(alignment: .leading) {
-                                
-                                TextEditor(text: $toDoText)
-                                    .frame(height: 200, alignment: .leading)
-                                    .frame(maxWidth: .infinity)
-                                    .lineSpacing(5)
-                                    .onReceive(Just(toDoText)) { toDoText in
-                                        textChanged(upper: toDoTextLimit, text: &self.toDoText)
-                                    }
-                                
-                                
-                                if toDoText.isEmpty {
-                                    VStack(alignment: .leading) {
-                                        Text("Enter your todo item")
-                                            .font(Font.body)
-                                            .foregroundColor(Color.gray.opacity(0.6))
-                                        Spacer()
-                                    }
-                                    .padding(.vertical, 12)
-                                    .padding(.horizontal, 4)
-                                }
-                                
+                        if toDoText.isEmpty {
+                            VStack(alignment: .leading) {
+                                Text("Enter your todo item")
+                                    .font(Font.body)
+                                    .foregroundColor(Color.gray)
+                                Spacer()
                             }
+                            .padding(.vertical, 12)
+                            .padding(.horizontal, 4)
+                            .zIndex(0)
+                        }
+                        TextEditor(text: $toDoText)
                             .frame(height: 200, alignment: .leading)
                             .frame(maxWidth: .infinity)
-                            
-                            .padding()
-                        
-                        
-                        Button(role: .none, action: {
-                            ViewContextMethods.addItem(context: viewContext, dueDate: dueDate, toDoText: toDoText, category: category)
-                            withAnimation {
-                                newItemOpen = false
+                            .lineSpacing(5)
+                            .onReceive(Just(toDoText)) { toDoText in
+                                textChanged(upper: toDoTextLimit, text: &self.toDoText)
                             }
-                        }, label: {
-                            HStack {
-                                Text("New task ")
-                                Image(systemName: "circle")
-                            }
-                            .frame(maxWidth: .infinity)
-                        })
+                            .zIndex(1)
+                            .opacity(toDoText.isEmpty ? 0.25 : 1)
+                        
+                    }
+                    .frame(height: 200, alignment: .leading)
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 30)
+                    
+                    
+                    Button(role: .none, action: {
+                        ViewContextMethods.addItem(context: viewContext, dueDate: dueDate, toDoText: toDoText, category: category)
+                        withAnimation {
+                            newItemOpen = false
+                        }
+                    }, label: {
+                        HStack {
+                            Text("New task ")
+                            Image(systemName: "circle")
+                        }
+                        .frame(maxWidth: .infinity)
+                    })
                         .buttonStyle(BorderedButtonStyle(shape: .roundedRectangle))
                         .tint(.indigo)
                         .controlProminence(.increased)
                         .controlSize(.large)
+                        .shadow(color: .black.opacity(0.1), radius: 20, x: 5, y: 10)
+                        .shadow(color: .black.opacity(0.1), radius: 1, x: 1, y: 1)
+                        .shadow(color: .white.opacity(1), radius: 5, x: -1, y: -1)
                         .padding()
-                        
+                    
                 }
                 .padding(.top, 100)
             }
@@ -135,6 +165,15 @@ struct NewItem: View {
         }
     }
     
+    private func getCategoryColor(categoryChosen: String) -> Color {
+        var category: [ItemCategory] {
+            categories.filter {
+                $0.category == categoryChosen
+            }
+        }
+        return category[0].color
+    }
+    
 }
 
 struct NewItem_Previews: PreviewProvider {
@@ -144,6 +183,6 @@ struct NewItem_Previews: PreviewProvider {
     static var previews: some View {
         NewItem(namespace: namespace,
                 newItemOpen: .constant(false)
-                )
+        )
     }
 }

@@ -42,25 +42,17 @@ struct ToDoList: View {
                     ForEach(searchResults, id: \.self) { item in
                         HStack {
                             
-                            if item.isDone {
-                                
-                                Image(systemName: "checkmark.seal.fill")
-                                    .resizable()
-                                    .foregroundColor(.green)
-                                    .frame(width: 30, height: 30)
-                                    .onTapGesture {
+                            Image(systemName: item.isDone ? "circle.fill" : "circle")
+                                .resizable()
+                                .foregroundColor(getCategoryColor(toDoItem: item))
+                                .frame(width: 30, height: 30)
+                                .onTapGesture {
+                                    withAnimation {
                                         ViewContextMethods.isDone(item: item, context: viewContext)
                                     }
+                                }
                                 
-                            } else {
-                                Image(systemName: "circle")
-                                    .resizable()
-                                    .foregroundColor(.red)
-                                    .frame(width: 30, height: 30)
-                                    .onTapGesture {
-                                        ViewContextMethods.isDone(item: item, context: viewContext)
-                                    }
-                            }
+                                .padding(.trailing, 10)
                             
                             VStack {
                                 HStack {
@@ -132,8 +124,14 @@ struct ToDoList: View {
         }
     }
     
-    
-    
+    private func getCategoryColor(toDoItem: Item) -> Color {
+        var category: [ItemCategory] {
+            categories.filter {
+                $0.category == toDoItem.category
+            }
+        }
+        return category[0].color
+    }
     
     
     private func deleteItems(offsets: IndexSet) {

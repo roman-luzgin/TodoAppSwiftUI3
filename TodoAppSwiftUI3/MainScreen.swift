@@ -106,8 +106,8 @@ struct MainScreen: View {
                                                 ZStack {
                                                 getCategoryColor(toDoItem: toDoItem).opacity(0.7)
                                                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                                                    .padding(.horizontal, 26)
-                                                    .padding(.vertical, 15)
+                                                    .padding(.horizontal, 30)
+                                                    .padding(.vertical, 20)
                                                 VStack {
                                                     // empty VStack for the blur
                                                 }
@@ -116,6 +116,9 @@ struct MainScreen: View {
                                             },
                                                 alignment: .leading
                                             )
+                                            .shadow(color: .black.opacity(0.1), radius: 20, x: 5, y: 10)
+                                            .shadow(color: .black.opacity(0.1), radius: 1, x: 1, y: 1)
+                                            .shadow(color: .white.opacity(1), radius: 5, x: -1, y: -1)
                                             .padding(.horizontal)
                                             
                                         }
@@ -158,36 +161,17 @@ struct MainScreen: View {
                     .navigationTitle("What's up, \(userName)!")
                     
                     // Navigation bar buttons to open different menus
-                    .navigationBarItems(leading:
-                                            Button(action: {
+                    .navigationBarItems(
+                        leading: Button(action: {
                         withAnimation {
                             menuOpen.toggle()
                         }
                         Haptics.giveSmallHaptic()
-                    }) {
+                    })
+                    {
                         Image(systemName: "rectangle.portrait.leftthird.inset.filled")
                     }
-                                            .buttonStyle(PlainButtonStyle())
-                                        ,
-                                        trailing: HStack {
-                        Button(action: {
-                            searchOpen.toggle()
-                            Haptics.giveSmallHaptic()
-                        }) {
-                            Image(systemName: "magnifyingglass")
-                        }
-                        .padding(.horizontal)
-                        .buttonStyle(PlainButtonStyle())
-                        
-                        Button(action: {
-                            notificationsOpen.toggle()
-                            Haptics.giveSmallHaptic()
-                        }) {
-                            Image(systemName: "bell")
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                        
-                    })
+                    .buttonStyle(PlainButtonStyle()))
                 }
                 
                 // MARK: New item view

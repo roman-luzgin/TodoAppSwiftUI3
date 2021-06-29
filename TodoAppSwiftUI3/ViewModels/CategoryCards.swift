@@ -35,7 +35,7 @@ struct CategoryCards: View {
                 
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .frame(maxWidth: maxProgress)
-                    .frame(width: progress, height: 5)
+                    .frame(width: numberOfTasks > 0 ? progress : 0, height: 5)
                     .foregroundColor(color.opacity(0.9))
             }
             
@@ -59,6 +59,8 @@ struct CategoryCards: View {
         )
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         .shadow(color: .black.opacity(0.1), radius: 20, x: 5, y: 10)
+        .shadow(color: .black.opacity(0.1), radius: 1, x: 1, y: 1)
+        .shadow(color: .white.opacity(1), radius: 5, x: -1, y: -1)
     }
 }
 
