@@ -17,7 +17,6 @@ struct ToDoList: View {
     private var items: FetchedResults<Item>
     
     @State private var searchQuery: String = ""
-    //@State private var showAllItems = true
     @State private var notDoneOnly = false
     
     var body: some View {
