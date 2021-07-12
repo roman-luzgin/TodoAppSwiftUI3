@@ -61,28 +61,17 @@ struct NewItem: View {
                     }
                     .pickerStyle(MenuPickerStyle())
                     .padding()
-                    
-                    
-                    
-                    
+
                     DatePicker(selection: $dueDate, displayedComponents: .date) {
                         Text("Due date")
-                            
+                        
                     }
                     .padding(.horizontal)
                     .padding(.vertical, 10)
                     .accentColor(Color.indigo)
-                    
                     .padding()
                     
-                    
-                    
-                    
                     ZStack(alignment: .leading) {
-                        
-                        
-                        
-                        
                         if toDoText.isEmpty {
                             VStack(alignment: .leading) {
                                 Text("Enter your todo item")
@@ -118,7 +107,7 @@ struct NewItem: View {
                     }, label: {
                         HStack {
                             Text("New task ")
-                            Image(systemName: "circle")
+                            Image(systemName: "chevron.up")
                         }
                         .frame(maxWidth: .infinity)
                     })

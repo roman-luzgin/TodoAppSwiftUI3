@@ -30,11 +30,11 @@ struct Menu: View {
                     
                     HStack {
                         VStack {
-                            Label("Menu 1", image: "circle")
+                            Label("Menu Item 1", systemImage: "circle")
                                 .font(.title)
-                            Label("Menu 2", image: "triangle")
+                            Label("Menu Item 2", systemImage: "triangle")
                                 .font(.title)
-                            Label("Menu 3", image: "square")
+                            Label("Menu Item 3", systemImage: "square")
                                 .font(.title)
                         }
                         Spacer()

@@ -40,15 +40,19 @@ struct CategoryCards: View {
             }
             
             
-                
+            
         }
         .padding(10)
         .frame(width: 200, height: 120, alignment: .leading)
         .background(
             ZStack {
-            color.opacity(0.9)
+            
+            LinearGradient(colors: [color.opacity(0.95), color.opacity(0.3)],
+                           startPoint: .topLeading, endPoint: .bottomTrailing)
+            
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .padding(20)
+            
             VStack {
                 // empty VStack for the blur
             }

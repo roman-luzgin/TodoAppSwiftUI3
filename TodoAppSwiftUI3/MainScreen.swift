@@ -25,13 +25,12 @@ struct MainScreen: View {
     }
     
     @State var newItemOpen = false
+    @State var settingsOpen = false
     
-    @State var searchOpen = false
-    @State var notificationsOpen = false
     @Binding var menuOpen: Bool
     
     
-    @AppStorage("userName") var userName = "username"
+    @AppStorage("userName") var userName = ""
     
     var body: some View {
         ZStack {
@@ -61,6 +60,7 @@ struct MainScreen: View {
                                         
                                     }
                                     .padding(.leading, 20)
+                                    .padding(.trailing, 30)
                                 }
                                 .frame(height: 190)
                                 
@@ -95,7 +95,7 @@ struct MainScreen: View {
                                                         }
                                                         .padding(.leading, 20)
                                                         .padding(.trailing, 10)
-            
+                                                    
                                                     Text("\(toDoItem.toDoText ?? "")")
                                                     Spacer()
                                                 }
@@ -131,7 +131,6 @@ struct MainScreen: View {
                                     }
                                     .frame(height: 200)
                                 }
-                                
                             }
                         }
                         
@@ -155,39 +154,53 @@ struct MainScreen: View {
                             }
                             .matchedGeometryEffect(id: "button", in: namespace)
                         }
-                        
-                        
                     }
-                    .navigationTitle("What's up, \(userName)!")
+                    .navigationTitle(userName.isEmpty ? "Hi there!" : "What's up, \(userName)!")
                     
-                    // Navigation bar buttons to open different menus
+                    // MARK: Navigation bar buttons to open different menus
                     .navigationBarItems(
+                        
+                        
                         leading: Button(action: {
                         withAnimation {
                             menuOpen.toggle()
                         }
                         Haptics.giveSmallHaptic()
                     })
-                    {
+                        {
                         Image(systemName: "rectangle.portrait.leftthird.inset.filled")
+                            .foregroundColor(Color.indigo)
                     }
-                    .buttonStyle(PlainButtonStyle()))
+                            .buttonStyle(PlainButtonStyle()),
+                        trailing: Button(action: {
+                        withAnimation {
+                            settingsOpen.toggle()
+                        }
+                        Haptics.giveSmallHaptic()
+                    }) {
+                        Image(systemName: "gear.circle.fill")
+                            .foregroundColor(Color.indigo)
+                    }
+                            .buttonStyle(PlainButtonStyle())
+                            .sheet(isPresented: $settingsOpen) {Settings()}
+                    )
                 }
                 
                 // MARK: New item view
             } else {
                 NewItem(namespace: namespace, newItemOpen: $newItemOpen)
             }
-            
         }
     }
     
+    // MARK: functions
     func getCategoryColor(toDoItem: Item) -> Color {
         var category: [ItemCategory] {
             categories.filter {
                 $0.category == toDoItem.category
             }
         }
+        
         return category[0].color
     }
     
