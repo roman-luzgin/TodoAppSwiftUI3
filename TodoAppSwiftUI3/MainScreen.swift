@@ -179,10 +179,13 @@ struct MainScreen: View {
                         Haptics.giveSmallHaptic()
                     }) {
                         Image(systemName: "gear.circle.fill")
+                            .resizable()
+                            .frame(width: 40, height: 40)
                             .foregroundColor(Color.indigo)
+                            
                     }
                             .buttonStyle(PlainButtonStyle())
-                            .sheet(isPresented: $settingsOpen) {Settings()}
+                            .sheet(isPresented: $settingsOpen, onDismiss: {settingsOpen = false}) {Settings()}
                     )
                 }
                 

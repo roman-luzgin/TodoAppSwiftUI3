@@ -9,6 +9,7 @@ import SwiftUI
 
 struct Settings: View {
     
+    @FocusState private var userNameIsFocused: Bool
     @Environment(\.dismiss) private var dismiss
     @AppStorage("userName") var username = ""
     
@@ -17,11 +18,16 @@ struct Settings: View {
         NavigationView {
             Form {
                 TextField("Username", text: $username)
+                    .focused($userNameIsFocused)
+                    .submitLabel(.done)
             }
             .navigationBarItems(trailing: Button("Done") {
                 dismiss()
             }
             .accentColor(.indigo))
+            .onSubmit {
+               
+            }
         }
     }
     

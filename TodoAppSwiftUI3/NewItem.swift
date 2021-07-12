@@ -84,6 +84,7 @@ struct NewItem: View {
                             .zIndex(0)
                         }
                         TextEditor(text: $toDoText)
+                        
                             .frame(height: 200, alignment: .leading)
                             .frame(maxWidth: .infinity)
                             .lineSpacing(5)
@@ -122,7 +123,13 @@ struct NewItem: View {
                     
                 }
                 .padding(.top, 100)
+                .background(Color.white
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .onTapGesture {
+                    UIApplication.shared.endEditing()
+                })
             }
+            
             
             VStack{
                 HStack{
@@ -145,6 +152,7 @@ struct NewItem: View {
                 Spacer()
             }
         }
+        
         
     }
     
