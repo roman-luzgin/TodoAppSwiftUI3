@@ -104,8 +104,6 @@ struct ToDoList: View {
                     !$0.toDoText!.isEmpty
                 }
             }
-        
-            
             
         } else {
             // getting only searched items
