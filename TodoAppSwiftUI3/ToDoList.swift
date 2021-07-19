@@ -24,7 +24,6 @@ struct ToDoList: View {
             List {
                 Section {
                     HStack {
-                        
                         Toggle(isOn: $notDoneOnly) {
                             Text(notDoneOnly ? "Show all items" : "Show not done only")
                                 .frame(maxWidth: .infinity)
@@ -33,14 +32,11 @@ struct ToDoList: View {
                         .tint(.indigo)
                         .clipShape(Capsule())
                         .animation(.easeInOut, value: notDoneOnly)
-                    
                     }
-                        
                 }
                 Section {
                     ForEach(searchResults, id: \.self) { item in
                         HStack {
-                            
                             Image(systemName: item.isDone ? "circle.fill" : "circle")
                                 .resizable()
                                 .foregroundColor(getCategoryColor(toDoItem: item))
@@ -50,7 +46,6 @@ struct ToDoList: View {
                                         ViewContextMethods.isDone(item: item, context: viewContext)
                                     }
                                 }
-                                
                                 .padding(.trailing, 10)
                             
                             VStack {
@@ -72,10 +67,9 @@ struct ToDoList: View {
                                 }
                             }
                             .padding(.leading, 5)
-                        
                         }
                         .frame(maxHeight: 130)
-                        .listRowSeparator(.hidden)
+                        .listRowSeparator(.hidden) // no separators
                     }
                     .onDelete(perform: deleteItems)
                 }

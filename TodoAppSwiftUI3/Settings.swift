@@ -26,11 +26,11 @@ struct Settings: View {
             }
             .accentColor(.indigo))
             .onSubmit {
-               
+                userNameIsFocused = false
+                dismiss() // we can use dismiss on submit if needed, especially if there is only one settings field
             }
         }
     }
-    
 }
 
 struct Settings_Previews: PreviewProvider {
